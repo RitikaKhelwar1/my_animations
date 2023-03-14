@@ -9,7 +9,7 @@ export default function (Stack) {
       <Stack.Screen
         name={navigationStrings.HOME}
         component={Home}
-        // options={{headerShown: false}}
+        options={{headerShown: false}}
       />
     </>
   );

@@ -1,27 +1,69 @@
 import React from 'react';
-import {SafeAreaView, StatusBar, View} from 'react-native';
+import {
+  SafeAreaView, ScrollView, StatusBar,
+  StyleSheet, View
+} from 'react-native';
+
 import colors from '../styles/colors';
+import { moderateScale } from '../styles/responsiveSize';
 
-import {moderateScale, moderateScaleVertical} from '../styles/responsiveSize';
 
-import strings from '../constants/lang';
 
 const WrapperContainer = ({
   children,
-  bgColor = colors.white,
-  statusBarColor = colors.white,
-  barStyle = 'dark-content',
+  statusBarAvailable = true,
+  isSafeAreaAvailable = true,
+  onlyScrollViewAvailable = false,
+  scrollViewBouncesEnable = false,
+  paddingAvailable = true,
+  mainViewStyle,
+  refreshControl,
+  contentContainerStyle
 }) => {
+  function WithOnlyScrollView() {
+    return (
+      <ScrollView
+        keyboardShouldPersistTaps={'always'}
+        onResponderMove={() => console.log('hellojhjkhkjhkj')}
+        bounces={scrollViewBouncesEnable}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{paddingBottom: moderateScale(60), flexGrow: 1,...contentContainerStyle}}
+        refreshControl={refreshControl}
+        >
+        {children}
+      </ScrollView>
+    );
+  }
+
   return (
-    <SafeAreaView
+    <View
       style={{
-        flex: 1,
-        backgroundColor: statusBarColor,
+        ...styles.container,
+        paddingHorizontal: paddingAvailable ? moderateScale(16) : 0,
+        ...mainViewStyle,
       }}>
-      <StatusBar backgroundColor={statusBarColor} barStyle={barStyle} />
-      <View style={{backgroundColor: bgColor, flex: 1}}>{children}</View>
-    </SafeAreaView>
+      {statusBarAvailable ? (
+        <StatusBar
+          animated={true}
+          backgroundColor={isSafeAreaAvailable ? colors.white : colors.themeBg}
+          barStyle={!isSafeAreaAvailable ? 'light-content' : 'dark-content'}
+          showHideTransition={'none'}
+          hidden={false}
+        />
+      ) : (
+        <></>
+      )}
+      {isSafeAreaAvailable ? <SafeAreaView /> : <></>}
+      {onlyScrollViewAvailable ? WithOnlyScrollView() : children}
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.white,
+  },
+});
 
 export default React.memo(WrapperContainer);
