@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home } from '../Screens';
+import { Home, Introduction, Type1 } from '../Screens';
 import navigationStrings from './navigationStrings';
 
 export default function (Stack) {
@@ -9,6 +9,11 @@ export default function (Stack) {
       <Stack.Screen
         name={navigationStrings.HOME}
         component={Home}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name={navigationStrings.INTRODUCTION}
+        component={Introduction}
         options={{headerShown: false}}
       />
     </>

@@ -1,4 +1,11 @@
-import {FlatList, ImageBackground, StyleSheet, Text, View} from 'react-native';
+import {
+  FlatList,
+  ImageBackground,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React from 'react';
 import {
   moderateScale,
@@ -6,8 +13,17 @@ import {
   textScale,
 } from '../styles/responsiveSize';
 import WrapperContainer from '../Components/WrapperContainer';
+import navigationStrings from '../navigation/navigationStrings';
 
-const MyHome = () => {
+const MyHome = ({navigation}) => {
+  const homeData = [
+    {type: 'Introduction', navigationScreen: navigationStrings.INTRODUCTION},
+    {type: 'type 2'},
+    {type: 'type 3'},
+    {type: 'type 4'},
+    {type: 'type 5'},
+    {type: 'type 6'},
+  ];
   const colors = [
     '#51D47B',
     '#CA3999',
@@ -31,27 +47,42 @@ const MyHome = () => {
     '#67541D',
     '#2183D4',
   ];
-  const _renderItem = ({item, index}) => {
-    return (
-      <View style={{...styles.animationCont, backgroundColor: colors[index]}}>
-        <Text style={{color: 'white', fontSize: textScale(14)}}>{item}</Text>
-      </View>
-    );
-  };
+  const _renderItem = ({item, index}) => {};
   return (
     <WrapperContainer paddingAvailable={false}>
       <ImageBackground
-        source={{uri: 'https://wallup.net/wp-content/uploads/2018/03/19/580282-iOS-Ipod-iPad-iPhone-748x1330.jpg'}}
+        source={{
+          uri: 'https://wallup.net/wp-content/uploads/2018/03/19/580282-iOS-Ipod-iPad-iPhone-748x1330.jpg',
+        }}
         resizeMode="cover"
         style={styles.image}>
-        <View style={{marginHorizontal:moderateScale(16)}} >
-            <Text style={styles.mainText} >My Animations</Text>
-          <FlatList
-            data={['type 1', 'type 2', 'type 3', 'type 4', 'type 5', 'type 6']}
+        <View style={{marginHorizontal: moderateScale(16)}}>
+          <Text style={styles.mainText}>My Animations</Text>
+          <View style={{flexWrap:"wrap",flexDirection:"row",justifyContent:"space-around"}} >
+          {homeData.map((item, index) => {
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  item?.navigationScreen &&
+                    navigation.navigate(item.navigationScreen);
+                }}
+                style={{
+                  ...styles.animationCont,
+                  backgroundColor: colors[index],
+                }}>
+                <Text style={{color: 'white', fontSize: textScale(14)}}>
+                  {item?.type}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+          </View>
+          {/* <FlatList
+            data={homeData}
             renderItem={_renderItem}
             numColumns={3}
             columnWrapperStyle={{justifyContent: 'space-between'}}
-          />
+          /> */}
         </View>
       </ImageBackground>
     </WrapperContainer>
@@ -72,10 +103,10 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
   },
-  mainText:{
-      fontSize:textScale(22),
-      textAlign:"center",
-      marginVertical:moderateScaleVertical(20),
-      fontWeight:"700"
-  }
+  mainText: {
+    fontSize: textScale(22),
+    textAlign: 'center',
+    marginVertical: moderateScaleVertical(20),
+    fontWeight: '700',
+  },
 });
